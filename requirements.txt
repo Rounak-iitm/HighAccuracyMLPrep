@@ -1,2 +1,7 @@
-if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860, share=True)
+gradio==4.44.1
+huggingface_hub==0.25.2
+numpy
+pandas
+scikit-learn
+lightgbm
+xgboost
