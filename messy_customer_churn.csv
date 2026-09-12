@@ -1,0 +1,11 @@
+Amount,City,Purchase_Date,Age,churned
+120.5,NYC,2023-01-01,25.0,Yes
+,London,2023-01-02,45.0,No
+300.0,NYC,2023-01-03,,No
+450.2,,invalid_date,35.0,Yes
+12000.0,Tokyo,2023-01-05,50.0,Yes
+80.0,London,2023-01-06,23.0,No
+95.0,Tokyo,2023-01-07,62.0,No
+,NYC,2023-01-08,29.0,Yes
+210.0,London,2023-01-09,31.0,No
+310.0,NYC,2023-01-10,,Yes
