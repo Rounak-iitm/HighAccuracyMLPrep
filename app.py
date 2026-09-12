@@ -16,8 +16,8 @@ from my_useful_tool import HighAccuracyMLPrep
 
 def process_and_train(file_obj, target_column, max_features):
     if file_obj is None:
-        return "Please upload a CSV file.", None, ""
-    
+        return "Please upload a CSV file.", None
+
     file_path = file_obj.name
     
     # 1. Run Data Prep Engine
@@ -93,4 +93,4 @@ with gr.Blocks(title="HighAccuracyMLPrep") as demo:
 app = demo
 
 if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=7860, share=False)
+    demo.launch(server_name="0.0.0.0", server_port=7860, share=True)
