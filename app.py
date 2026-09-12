@@ -16,7 +16,7 @@ from my_useful_tool import HighAccuracyMLPrep
 
 def process_and_train(file_obj, target_column, max_features):
     if file_obj is None:
-        return "Please upload a CSV file.", None
+        return "Please upload a CSV file.", ""
 
     file_path = file_obj.name
     
