@@ -3,7 +3,6 @@ title: HighAccuracyMLPrep
 author: Rounak
 emoji: 🚀
 colorFrom: blue
-title: HighAccuracyMLPrep
 colorTo: purple
 sdk: gradio
 sdk_version: 4.0.0
