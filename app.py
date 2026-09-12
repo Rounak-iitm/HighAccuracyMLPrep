@@ -10,12 +10,11 @@ from sklearn.cluster import KMeans
 from lightgbm import LGBMClassifier, LGBMRegressor
 
 def inspect_csv(file):
-    """Parses CSV upon upload and populates column dropdown."""
+    """Parses CSV upon upload and populates target column dropdown."""
     if file is None:
         return gr.update(choices=[], value=None)
     df = pd.read_csv(file.name)
     cols = df.columns.tolist()
-    # Include an option for Unsupervised Clustering
     choices = ["(None - Unsupervised Clustering)"] + cols
     return gr.update(choices=choices, value=choices[1] if len(choices) > 1 else None)
 
@@ -25,9 +24,7 @@ def process_data_and_train(file, target_col, max_features):
 
     df = pd.read_csv(file.name)
     
-    # -------------------------------------------------------------
-    # Feature Processing: Separate numerical and categorical columns
-    # -------------------------------------------------------------
+    # Separate features and target
     if target_col and target_col != "(None - Unsupervised Clustering)":
         if target_col not in df.columns:
             return f"Error: Column '{target_col}' not found.", None, None
@@ -58,23 +55,19 @@ def process_data_and_train(file, target_col, max_features):
     
     X_processed = ct.fit_transform(X)
     
-    # Truncate to Max Features if specified
+    # Truncate to Max Features
     if X_processed.shape[1] > max_features:
         X_processed = X_processed[:, :max_features]
 
-    # Save cleaned matrix
+    # Save cleaned matrix CSV
     processed_df = pd.DataFrame(X_processed)
     if is_supervised:
         processed_df["target"] = y.values
     processed_df.to_csv("processed_dataset.csv", index=False)
 
-    # -------------------------------------------------------------
     # Supervised Learning Mode
-    # -------------------------------------------------------------
     if is_supervised:
-        # Determine problem type (Classification vs Regression)
         is_classification = y.nunique() <= 20 or y.dtype == 'object'
-        
         X_train, X_test, y_train, y_test = train_test_split(X_processed, y, test_size=0.2, random_state=42)
         
         if is_classification:
@@ -88,13 +81,10 @@ def process_data_and_train(file, target_col, max_features):
             score = model.score(X_test, y_test)
             metrics_summary = f"🚀 Supervised Training Complete!\n• Task: Regression\n• R² Score: {score:.4f}"
 
-        # Save model artifact
         joblib.dump(model, "trained_model.joblib")
         best_params = model.get_params()
 
-    # -------------------------------------------------------------
     # Unsupervised Clustering Mode
-    # -------------------------------------------------------------
     else:
         kmeans = KMeans(n_clusters=3, random_state=42)
         clusters = kmeans.fit_predict(X_processed)
@@ -108,10 +98,7 @@ def process_data_and_train(file, target_col, max_features):
     status_text = f"{metrics_summary}\n\n⚙️ Model Parameters:\n{best_params}"
     return status_text, "processed_dataset.csv", "trained_model.joblib"
 
-
-# -------------------------------------------------------------
-# Gradio Interface Scaffolding
-# -------------------------------------------------------------
+# UI Scaffold
 with gr.Blocks(title="HighAccuracyMLPrep Engine") as demo:
     gr.Markdown("# ⚡ HighAccuracyMLPrep Engine")
     gr.Markdown("Upload a raw CSV dataset to clean missing values, encode features, train models, or perform unsupervised clustering.")
@@ -128,7 +115,6 @@ with gr.Blocks(title="HighAccuracyMLPrep Engine") as demo:
             processed_file_output = gr.File(label="Download Processed Dataset (CSV)")
             model_artifact_output = gr.File(label="Download Trained Model (.joblib)")
 
-    # Callbacks
     file_input.change(fn=inspect_csv, inputs=[file_input], outputs=[target_dropdown])
     btn.click(
         fn=process_data_and_train,
@@ -137,4 +123,5 @@ with gr.Blocks(title="HighAccuracyMLPrep Engine") as demo:
     )
 
 if __name__ == "__main__":
-    demo.launch()
+    port = int(os.environ.get("PORT", 7860))
+    demo.launch(server_name="0.0.0.0", server_port=port)
