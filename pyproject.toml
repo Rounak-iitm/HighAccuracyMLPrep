@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "HighAccuracyMLPrep"
+version = "0.1.0"
+description = "Automated high-efficiency data preparation engine for production machine learning."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [
+    { name = "ML Engineering Team", email = "dev@example.com" }
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.20.0",
+    "pandas>=1.3.0",
+    "scikit-learn>=1.0.0",
+    "lightgbm>=3.3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/HighAccuracyMLPrep"
+Repository = "https://github.com/yourusername/HighAccuracyMLPrep"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/my_useful_tool"]
