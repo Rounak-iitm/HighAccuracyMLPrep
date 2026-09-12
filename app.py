@@ -82,7 +82,7 @@ with gr.Blocks(title="HighAccuracyMLPrep") as demo:
             
         with gr.Column():
             status_output = gr.Markdown(label="Diagnostics Report")
-            file_output = gr.File(label="Download Cleaned CSV Matrix")
+            file_output = gr.Textbox(label="Processed CSV Path", interactive=False)
             
     submit_btn.click(
         fn=process_and_train,
